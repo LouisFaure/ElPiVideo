@@ -2,7 +2,6 @@ library(jpeg)
 library(ElPiGraph.R)
 library(stringr)
 library(rgl)
-library(foreach)
 library(irlba)
 
 unzip("Metro.zip",exdir="frames")
