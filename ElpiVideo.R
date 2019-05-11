@@ -3,10 +3,11 @@ library(ElPiGraph.R)
 library(stringr)
 library(rgl)
 library(foreach)
+library(irlba)
 
 unzip("Metro.zip",exdir="frames")
 system("ffmpeg -y -f image2 -i frames/%*.jpg -vf setpts=2*PTS initial.mp4")
-system("for f in frames/*.jpg; do mv -n \"$f\" \"${f/*/frames/$RANDOM.jpg}\"; done")
+system("for f in frames/*.jpg; do mv -n $f frames/$RANDOM.jpg; done;")
 system("ffmpeg -y -f image2 -i frames/%*.jpg -vf setpts=2*PTS rand.mp4")
 
 
@@ -21,9 +22,8 @@ for (i in 1:length(images)){
 }
 
 print("Perfoming PCA")
-pca = prcomp(x = expr)
-df_out <- as.data.frame(pca$x)
-X = df_out[,1:3]
+pca = prcomp_irlba(expr) 
+X = pca$x
 
 # Plot Points with rgl
 plot3d(x=X[,1],y=X[,2],z=X[,3],surface=FALSE,xlab = "PC1", ylab = "PC2",zlab = "PC3",col="blue",size=7)
